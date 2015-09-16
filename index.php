@@ -78,9 +78,10 @@ if($showmode)
 			>We do not know what you paste.
 			<br />
 			All data is <span class="accent">encrypted</span> on our servers and we <span class="accent">never</span> store your key or info.
+			<br />
 		</div>
 		<div class="logo">
-			<span class="accent">y</span>bin
+			<a href="http://zx.rs/7/ybin---paste-data-privately/" target="_blank"><span class="accent">y</span>bin</a>
 		</div>
 		<div class="nav">
 			<a role="button" class="button fa-file-text fa" id="new"></a>

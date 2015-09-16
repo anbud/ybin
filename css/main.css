@@ -65,6 +65,11 @@ body {
 	display: inline;
 }
 
+#header .logo a, #header .logo a:visited {
+	color: #ababab !important;
+	text-decoration: none;
+}
+
 #header #info, #header #about {
 	position: absolute;
 	top: 48px;
