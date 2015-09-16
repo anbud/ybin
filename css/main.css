@@ -1,0 +1,164 @@
+/*
+ *  ybin 0.3 
+ *
+ *  Copyright (C) 2015 - Andrej Budinčević <andrew@hotmail.rs>
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *  GNU General Public License for more details.
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+
+/* Roboto font (latin) */
+
+@font-face {
+	font-family: 'Roboto';
+	font-style: normal;
+	font-weight: 300;
+	src: local('Roboto Light'), local('Roboto-Light'), url(http://fonts.gstatic.com/s/roboto/v13/Hgo13k-tfSpn0qi1SFdUfVtXRa8TVwTICgirnJhmVJw.woff2) format('woff2');
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+
+body {
+	font-family: "Roboto", "Helvetica", "Arial", "FreeSans", "Verdana", "Tahoma", "Lucida Sans", "Lucida Sans Unicode", "Luxi Sans", sans-serif;
+	font-size: 14px;
+	margin: 0;
+	background: #272727;
+}
+
+
+/* Accent color */
+.accent {
+	color: #018184;
+}
+
+
+/* Header */
+
+#header {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 3;
+	width: 100%;
+	height: 45px;
+	background: rgba(23,23,23, 0.6);
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+
+#header .logo {
+	padding: 10px;
+	color: #ababab;
+	background-color: #272727;
+	width: 80px;
+	font-size: 30px;
+	display: inline;
+}
+
+#header #info, #header #about {
+	position: absolute;
+	top: 48px;
+	left: 82.2px;
+	color: #ababab;
+	width: 170px;
+	background: rgba(23,23,23, 0.6);
+	border-top: 0;
+	padding: 10px;
+	display: none;
+}
+
+#header #about {
+	left: 0 !important;
+	width: 250px !important;
+}
+
+#header .nav {
+	position: relative;
+	padding: 4px;
+	color: #ababab;
+	text-align: center;
+	display: inline;
+}
+
+#header .nav .disabled {
+	opacity: 0.5 !important;
+	cursor: default;
+}
+
+#header .nav .disabled:hover {
+	opacity: 0.5 !important;
+	cursor: default;
+}
+
+#header .nav .button {
+	position: relative;
+	width: 20px;
+	opacity: 0.8;
+	cursor: pointer; 
+	color: #c8c8c8;
+	padding: 5px;
+	font-size: 26px !important;
+	margin-left: 10px;
+	margin-top: 2px;
+}
+
+#header .nav .button:hover {
+	opacity: 1; 
+}
+
+#header .status {
+	position: relative;
+    padding: 11px;
+    color: #ababab;
+    text-align: center;
+    display: inline;
+    margin-right: 10px;
+    float: right;
+    font-size: 15px;
+}
+
+.error {
+	color: red !important;
+}
+
+
+/* Main */
+
+#main {
+	width: 100%; 
+	position: absolute; 
+	background: #272727;
+	top: 50px;
+	bottom: 0;
+	right: 0;
+	left: 0;
+}
+
+#main .paste {
+	position: absolute;
+	top: 10px;
+	right: 1%;
+	outline: none;
+	resize: none;
+	background: transparent;
+	margin-left: 10px;
+	bottom: 10px;
+	display: block;
+	width: 98%;
+	border: 0;
+	color: #ababab;
+}
+
+#cipher, #errormessage {
+	display: none;
+}
