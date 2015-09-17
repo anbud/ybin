@@ -99,7 +99,7 @@ function decryptPaste(key, cipher) {
 		return;
 	}
 
-	$('textarea#paste').val(cleartext);
+	$('#paste').html(cleartext);
 }
 
 /**
@@ -107,7 +107,7 @@ function decryptPaste(key, cipher) {
  */
 function save() {
 	// Do not send if no data.
-	if ($('textarea#paste').val().length == 0) {
+	if ($('#paste').val().length == 0) {
 		showStatus("Paste can\'t be <span class=\"accent\">empty</span>.", 3000)
 		return;
 	}
@@ -122,7 +122,7 @@ function save() {
 	showStatus('Saving paste...');
 
 	var randomkey = sjcl.codec.base64.fromBits(sjcl.random.randomWords(8, 0), 0);
-	var cipherdata = zeroCipher(randomkey, $('textarea#paste').val());
+	var cipherdata = zeroCipher(randomkey, $('#paste').val());
 
 	var data_to_send = { data: cipherdata };
 	$.post("/save.php", data_to_send, 'json')
@@ -146,7 +146,7 @@ function save() {
  * Return raw text
  */
 function rawText() {
-	var paste = $('textarea#paste').val();
+	var paste = $('#paste').val();
 	var newDoc = document.open('text/html', 'replace');
 
 	newDoc.write('<pre>'+paste+'</pre>');
@@ -157,15 +157,32 @@ function rawText() {
  * Create a new paste.
  */
 function newPaste() {
-	$("textarea#paste").val("");
+	$("#paste").val("");
+
+	$('.nano').nanoScroller();
 
 	$("#save").removeClass("disabled");
 	$("#raw").addClass("disabled");
 	$("#copy").addClass("disabled");
+	$("#fork").addClass("disabled");
 
 	$("#header .status").html("");
 
-	$("textarea#paste").attr('disabled', false).focus();
+	$("#paste").attr('disabled', false).focus();
+}
+
+/**
+ * Fork the current paste.
+ */
+function fork() {
+	$("#save").removeClass("disabled");
+	$("#raw").addClass("disabled");
+	$("#copy").addClass("disabled");
+	$("#fork").addClass("disabled");
+
+	$("#header .status").html("");
+
+	$("#paste").attr('disabled', false).focus();
 }
 
 /**
@@ -261,11 +278,13 @@ $(function() {
 	$("#new").click(function(){if(isActive("new")) newPaste()});
 	$("#save").click(function(){if(isActive("save")) save()});
 	$("#raw").click(function(){if(isActive("raw")) rawText()});
+	$("#fork").click(function(){if(isActive("fork")) fork()});
 	$("#copy").click(function(){if(isActive("copy")) copyToClipboard()});
 
 	$("#new").hover(function(){showInfo("New paste", "ctrl+p")});
 	$("#save").hover(function(){showInfo("Save paste", "ctrl+s")});
 	$("#raw").hover(function(){showInfo("View raw data", "ctrl+shift+r")});
+	$("#fork").hover(function(){showInfo("Fork current paste", "ctrl+e")});
 	$("#copy").hover(function(){showInfo("Copy link to clipboard", "ctrl+shift+c")});
 
 	$(".logo").hover(function(){showAbout()});
@@ -273,6 +292,7 @@ $(function() {
 	Mousetrap.bindGlobal('mod+p', function(e){if(isActive("new")) newPaste(); return false;});
 	Mousetrap.bindGlobal('mod+s', function(e){if(isActive("save")) save(); return false;});
 	Mousetrap.bindGlobal('mod+shift+r', function(e){if(isActive("raw")) rawText(); return false;});
+	Mousetrap.bindGlobal('mod+e', function(e){if(isActive("fork")) fork(); return false;});
 	Mousetrap.bindGlobal('mod+shift+c', function(e){if(isActive("copy")) copyToClipboard(); return false;});
 
 	if($('div#cipher').text().length > 1) {
@@ -288,5 +308,7 @@ $(function() {
 		showError($('div#errormessage').text());
 	else 
 		newPaste();
+
+	$(".nano").nanoScroller({ alwaysVisible: true });
 	
 });

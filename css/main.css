@@ -75,7 +75,7 @@ body {
 	top: 48px;
 	left: 82.2px;
 	color: #ababab;
-	width: 170px;
+	width: 210px;
 	background: rgba(23,23,23, 0.6);
 	border-top: 0;
 	padding: 10px;
@@ -152,7 +152,7 @@ body {
 #main .paste {
 	position: absolute;
 	top: 10px;
-	right: 1%;
+	right: 1% !important;
 	outline: none;
 	resize: none;
 	background: transparent;
@@ -166,4 +166,48 @@ body {
 
 #cipher, #errormessage {
 	display: none;
+}
+
+
+/* Nano slider */
+
+.nano {
+  overflow : hidden;
+}
+.nano > .nano-content {
+  overflow      : scroll;
+  overflow-x    : hidden;
+}
+.nano > .nano-content:focus {
+  outline: thin dotted;
+}
+.nano > .nano-content::-webkit-scrollbar {
+  display: none;
+}
+.has-scrollbar > .nano-content::-webkit-scrollbar {
+  display: block;
+}
+.nano > .nano-pane {
+  background : rgba(23,23,23, 0.6);
+  position   : absolute;
+  width      : 10px;
+  right      : 0;
+  top        : 0;
+  bottom     : 0;
+  visibility : hidden\9; /* Target only IE7 and IE8 with this hack */
+  opacity    : .01;
+  -webkit-transition    : .2s;
+  -moz-transition       : .2s;
+  -o-transition         : .2s;
+  transition            : .2s;
+}
+.nano > .nano-pane > .nano-slider {
+  /*background: #ababab;*/
+  background: rgba(171,171,171,.5);
+  position              : relative;
+  margin                : 0 1px;
+}
+.nano:hover > .nano-pane, .nano-pane.active, .nano-pane.flashed {
+  visibility : visible\9; /* Target only IE7 and IE8 with this hack */
+  opacity    : 0.99;
 }

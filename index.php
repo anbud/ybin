@@ -66,6 +66,7 @@ if($showmode)
 	<script src="/js/ybin.js"></script>
 	<script src="/js/mousetrap.min.js"></script>
 	<script src="/js/mousetrap-global-bind.min.js"></script>
+	<script src="/js/jquery.nanoscroller.min.js"></script>
 
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
@@ -86,13 +87,14 @@ if($showmode)
 		<div class="nav">
 			<a role="button" class="button fa-file-text fa" id="new"></a>
 			<a role="button" class="button fa-floppy-o fa <?php echo (!$showmode ? "" : "disabled"); ?>" id="save"></a>
+			<a role="button" class="button fa-pencil fa <?php echo ($showmode ? "" : "disabled"); ?>" id="fork"></a>
 			<a role="button" class="button fa-file-code-o fa <?php echo ($showmode ? "" : "disabled"); ?>" id="raw"></a>
 			<a role="button" class="button fa-clipboard fa <?php echo ($showmode ? "" : "disabled"); ?>" id="copy"></a>
 		</div>
 		<div class="status"></div>
 	</div>
-	<div id="main">
-		<textarea class="paste" id="paste" spellcheck="false" autofocus <?php echo (!$showmode ? "" : "disabled"); ?>></textarea>
+	<div id="main" class="nano">
+		<textarea class="paste nano-content" id="paste" spellcheck="false" autofocus <?php echo (!$showmode ? "" : "disabled"); ?>></textarea>
 	</div>
 	<?php
 	if($showmode)
