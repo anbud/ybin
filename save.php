@@ -59,7 +59,7 @@ function validSJCL($jsonstring) {
 	// Make sure some fields have a reasonable size.
 	if(strlen($decoded['iv'])>24) 
 		return false;
-	if(strlen($decoded['salt'])>14) 
+	if(strlen($decoded['salt'])>65) 
 		return false;
 
 
