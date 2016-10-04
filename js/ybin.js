@@ -74,7 +74,7 @@ function zeroDecipher(key, data) {
  *   eg. http://server.com/zero/?aaaa#bbbb --> http://server.com/zero/
  */
 function scriptLocation() {
-  return "http://ybin.me/";
+  return "https://ybin.me/";
 }
 
 /**
@@ -99,7 +99,7 @@ function decryptPaste(key, cipher) {
 		return;
 	}
 
-	$('#paste').html(cleartext);
+	$('#paste').text(cleartext);
 }
 
 /**
@@ -146,7 +146,7 @@ function save() {
  * Return raw text
  */
 function rawText() {
-	var paste = $('#paste').val();
+	var paste = $('#paste').html();
 	var newDoc = document.open('text/html', 'replace');
 
 	newDoc.write('<pre>'+paste+'</pre>');
