@@ -94,7 +94,7 @@ if($showmode)
 		<div class="status"></div>
 	</div>
 	<div id="main" class="nano">
-		<textarea class="paste nano-content" id="paste" spellcheck="false" autofocus <?php echo (!$showmode ? "" : "disabled"); ?>></textarea>
+		<textarea class="paste nano-content" id="paste" spellcheck="false" <?php echo (!$showmode ? "" : "readonly"); ?>></textarea>
 	</div>
 	<?php
 	if($showmode)

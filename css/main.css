@@ -24,7 +24,7 @@
 	font-family: 'Roboto';
 	font-style: normal;
 	font-weight: 300;
-	src: local('Roboto Light'), local('Roboto-Light'), url(http://fonts.gstatic.com/s/roboto/v13/Hgo13k-tfSpn0qi1SFdUfVtXRa8TVwTICgirnJhmVJw.woff2) format('woff2');
+	src: local('Roboto Light'), local('Roboto-Light'), url(https://fonts.gstatic.com/s/roboto/v13/Hgo13k-tfSpn0qi1SFdUfVtXRa8TVwTICgirnJhmVJw.woff2) format('woff2');
 	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
 }
 
@@ -152,14 +152,13 @@ body {
 #main .paste {
 	position: absolute;
 	top: 10px;
-	right: 1% !important;
 	outline: none;
 	resize: none;
 	background: transparent;
 	margin-left: 10px;
 	bottom: 10px;
 	display: block;
-	width: 98%;
+	width: 100%;
 	border: 0;
 	color: #ababab;
 }
@@ -172,42 +171,42 @@ body {
 /* Nano slider */
 
 .nano {
-  overflow : hidden;
+	overflow: hidden;
 }
 .nano > .nano-content {
-  overflow      : scroll;
-  overflow-x    : hidden;
+	overflow: scroll;
+	overflow-x: hidden;
+	height: 100%;
 }
 .nano > .nano-content:focus {
-  outline: thin dotted;
+	outline: thin dotted;
 }
 .nano > .nano-content::-webkit-scrollbar {
-  display: none;
+	display: none;
 }
 .has-scrollbar > .nano-content::-webkit-scrollbar {
-  display: block;
+	display: block;
 }
 .nano > .nano-pane {
-  background : rgba(23,23,23, 0.6);
-  position   : absolute;
-  width      : 10px;
-  right      : 0;
-  top        : 0;
-  bottom     : 0;
-  visibility : hidden\9; /* Target only IE7 and IE8 with this hack */
-  opacity    : .01;
-  -webkit-transition    : .2s;
-  -moz-transition       : .2s;
-  -o-transition         : .2s;
-  transition            : .2s;
+	background: rgba(23,23,23, 0.6);
+	position: absolute;
+	width: 10px;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	visibility: hidden\9; /* Target only IE7 and IE8 with this hack */
+	opacity: .01;
+	-webkit-transition: .2s;
+	-moz-transition: .2s;
+	-o-transition: .2s;
+	transition: .2s;
 }
 .nano > .nano-pane > .nano-slider {
-  /*background: #ababab;*/
-  background: rgba(171,171,171,.5);
-  position              : relative;
-  margin                : 0 1px;
+	background: rgba(171,171,171,.5);
+	position: relative;
+	margin: 0 1px;
 }
 .nano:hover > .nano-pane, .nano-pane.active, .nano-pane.flashed {
-  visibility : visible\9; /* Target only IE7 and IE8 with this hack */
-  opacity    : 0.99;
+	visibility: visible\9; /* Target only IE7 and IE8 with this hack */
+	opacity: 0.99;
 }

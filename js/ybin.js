@@ -99,7 +99,7 @@ function decryptPaste(key, cipher) {
 		return;
 	}
 
-	$('#paste').text(cleartext);
+	$('#paste').text(cleartext)
 }
 
 /**
@@ -168,7 +168,7 @@ function newPaste() {
 
 	$("#header .status").html("");
 
-	$("#paste").attr('disabled', false).focus();
+	$("#paste").attr('disabled', false).attr('readonly', false).focus();
 }
 
 /**
@@ -309,6 +309,6 @@ $(function() {
 	else 
 		newPaste();
 
-	$(".nano").nanoScroller({ alwaysVisible: true });
+	$(".nano").nanoScroller({ alwaysVisible: false });
 	
 });
