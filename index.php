@@ -58,7 +58,15 @@ if($showmode)
 	<link rel="stylesheet" type="text/css" href="/css/main.css?version=3">
 	<link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
 
-	<script src="/js/main.min.js?version=1"></script>
+	<script src="/js/jquery.js?version=2"></script>
+	<script src="/js/sjcl.js?version=2"></script>
+	<script src="/js/base64.js"></script>
+	<script src="/js/rawdeflate.js"></script>
+	<script src="/js/rawinflate.js"></script>
+	<script src="/js/ybin.js?version=6"></script>
+	<script src="/js/mousetrap.min.js"></script>
+	<script src="/js/mousetrap-global-bind.min.js"></script>
+	<script src="/js/jquery.nanoscroller.min.js"></script>
 
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
