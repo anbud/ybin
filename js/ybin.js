@@ -1,7 +1,7 @@
 /*
- *  ybin 0.3 
+ *  ybin 0.5
  *
- *  Copyright (C) 2015 - Andrej Budinčević <andrew@hotmail.rs>
+ *  Copyright (C) 2017 - Andrej Budinčević <andrew@hotmail.rs>
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,11 +24,8 @@
  * @author sebsauvage
  */
 
-var shown = false;
-var aShown = false;
-
 // Immediately start random number generator collector.
-sjcl.random.startCollectors();
+sjcl.random.startCollectors()
 
 /**
  * Compress a message (deflate compression). Returns base64 encoded data.
@@ -36,15 +33,15 @@ sjcl.random.startCollectors();
  * @param string message
  * @return base64 string data
  */
-function compress(message) {
-	return Base64.toBase64(RawDeflate.deflate(Base64.utob(message)));
+var compress = function(message) {
+	return Base64.toBase64(RawDeflate.deflate(Base64.utob(message)))
 }
 
 /**
  * Decompress a message compressed with compress().
  */
-function decompress(data) {
-	return Base64.btou(RawDeflate.inflate(Base64.fromBase64(data)));
+var decompress = function(data) {
+	return Base64.btou(RawDeflate.inflate(Base64.fromBase64(data)))
 }
 
 /**
@@ -54,8 +51,8 @@ function decompress(data) {
  * @param string message
  * @return encrypted string data
  */
-function zeroCipher(key, message) {
-	return sjcl.encrypt(key,compress(message));
+var zeroCipher = function(key, message) {
+	return sjcl.encrypt(key, compress(message))
 }
 
 /**
@@ -65,24 +62,8 @@ function zeroCipher(key, message) {
  *  @param encrypted string data
  *  @return string readable message
  */
-function zeroDecipher(key, data) {
-	return decompress(sjcl.decrypt(key,data));
-}
-
-/**
- * @return the current script location (without search or hash part of the URL).
- *   eg. http://server.com/zero/?aaaa#bbbb --> http://server.com/zero/
- */
-function scriptLocation() {
-  return "https://ybin.me/";
-}
-
-/**
- * @return the paste unique identifier from the URL
- *   eg. 'c05354954c49a487'
- */
-function pasteID() {
-	return window.location.pathname.substring(3);
+var zeroDecipher = function(key, data) {
+	return decompress(sjcl.decrypt(key, data))
 }
 
 /**
@@ -91,12 +72,13 @@ function pasteID() {
  * @param string key: decryption key
  * @param array cipher: array of messages to display (items = array with keys ('data','meta')
  */
-function decryptPaste(key, cipher) {
+var decryptPaste = function(key, cipher) {
 	try { 
-		var cleartext = zeroDecipher(key, cipher[0].data);
+		var cleartext = zeroDecipher(key, cipher[0].data)
 	} catch(err) {
-		showError("Wrong key.");
-		return;
+		showError('Wrong key.')
+
+		return
 	}
 
 	$('#paste').text(cleartext)
@@ -105,99 +87,99 @@ function decryptPaste(key, cipher) {
 /**
  *  Save a new paste
  */
-function save() {
+var save = function() {
 	// Do not send if no data.
-	if ($('#paste').val().length == 0) {
-		showStatus("Paste can\'t be <span class=\"accent\">empty</span>.", 3000)
-		return;
+	if ($('#paste').val().length === 0) {
+		showStatus('Paste can\'t be <span class="accent">empty</span>.', 3000)
+
+		return
 	}
 
 	// If sjcl has not collected enough entropy yet, display a message.
 	if (!sjcl.random.isReady()) {
-		showStatus('We need more <span class="accent">entropy</span>. Please move your mouse a lil\' bit more.', 2000);
-		sjcl.random.addEventListener('seeded', function(){ save(); }); 
-		return; 
+		showStatus('We need more <span class="accent">entropy</span>. Please move your mouse a lil\' bit more.', 2000)
+
+		sjcl.random.addEventListener('seeded', function(){
+			save()
+		})
+
+		return
 	}
 	
-	showStatus('Saving paste...');
+	showStatus('Saving paste...')
 
-	var randomkey = sjcl.codec.base64.fromBits(sjcl.random.randomWords(8, 0), 0);
-	var cipherdata = zeroCipher(randomkey, $('#paste').val());
+	var randomkey = sjcl.codec.base64.fromBits(sjcl.random.randomWords(8, 0), 0)
+	var cipherdata = zeroCipher(randomkey, $('#paste').val())
 
-	var data_to_send = { data: cipherdata };
-	$.post("/save.php", data_to_send, 'json')
-	.error(function() {
-		showError('Server not responding. Try again.', 4000);
+	$.post('/save.php', {
+		data: cipherdata
+	}, 'json')
+	.fail(function() {
+		showError('Server not responding. Try again.', 4000)
 	})
-	.success(function(data) {
-		if (data.status == 0) {
-			window.location.href = scriptLocation() + "p/" + data.id + '#' + randomkey;
+	.done(function(data) {
+		if (data.status === 0) {
+			window.location.href = 'https://ybin.me/p/' + data.id + '#' + randomkey
+		} else if (data.status === 1) {
+			showError('Error saving paste: <span class="accent">' + data.message + '</span>')
+		} else {
+			showError('Error saving paste.')
 		}
-		else if (data.status==1) {
-			showError('Error saving paste: <span class="accent">' + data.message + '</span>');
-		}
-		else {
-			showError('Error saving paste.');
-		}
-	});
+	})
 }
 
 /** 
  * Return raw text
  */
-function rawText() {
-	var paste = $('#paste').html();
-	var newDoc = document.open('text/html', 'replace');
+var rawText = function() {
+	var paste = $('#paste').html()
+	var newDoc = document.open('text/html', 'replace')
 
-	newDoc.write('<pre>'+paste+'</pre>');
-	newDoc.close();
+	newDoc.write('<pre>' + paste + '</pre>')
+	newDoc.close()
 }
 
 /**
  * Create a new paste.
  */
-function newPaste() {
-	$("#paste").val("");
+var newPaste = function() {
+	$('#paste').val('')
 
-	$('.nano').nanoScroller();
+	$('.nano').nanoScroller()
 
-	$("#save").removeClass("disabled");
-	$("#raw").addClass("disabled");
-	$("#copy").addClass("disabled");
-	$("#fork").addClass("disabled");
+	$('#save').removeClass('disabled')
+	$('#raw').addClass('disabled')
+	$('#copy').addClass('disabled')
+	$('#fork').addClass('disabled')
 
-	$("#header .status").html("");
-
-	$("#paste").attr('disabled', false).attr('readonly', false).focus();
+	$('#paste').attr('disabled', false).attr('readonly', false).focus()
 }
 
 /**
  * Fork the current paste.
  */
-function fork() {
-	$("#save").removeClass("disabled");
-	$("#raw").addClass("disabled");
-	$("#copy").addClass("disabled");
-	$("#fork").addClass("disabled");
+var fork = function() {
+	$('#save').removeClass('disabled')
+	$('#raw').addClass('disabled')
+	$('#copy').addClass('disabled')
+	$('#fork').addClass('disabled')
 
-	$("#header .status").html("");
-
-	$("#paste").attr('disabled', false).focus();
+	$('#paste').attr('disabled', false).attr('readonly', false).focus()
 }
 
 /**
  * Copy paste URL to clipboard.
  */
-function copyToClipboard() {
-	window.prompt("Copy to clipboard: Ctrl+C, Enter", window.location.href);
+var copyToClipboard = function() {
+	window.prompt('Copy to clipboard: Ctrl+C, Enter', window.location.href)
 }
 
 /**
  * Display an error message
  * @param string message: error to display
  */
-function showError(message) {
-	$("#header .status").html("<span class=\"accent\"></span> " + message);
+var showError = function(message) {
+	$('#header .status').html('<span class="accent"></span> ' + message)
 }
 
 /**
@@ -206,22 +188,14 @@ function showError(message) {
  * @param string message: text to display
  * @param integer timeout (optional): timeout time for the message.
  */
-function showStatus(message, timeout) {
-	$("#header .status").html(message).hide().fadeIn("slow");
+var showStatus = function(message, timeout) {
+	$('#header .status').html(message).hide().fadeIn('slow')
 	
-	if(timeout != undefined && timeout != 0)
-		setTimeout(function(){ 
-			$("#header .status").fadeOut("slow"); 
-		}, timeout);
-}
-
-function showAbout() {
-	if(!aShown)
-		$("#about").show();
-	else 
-		$("#about").hide();
-
-	aShown = !aShown;
+	if(timeout) {
+		setTimeout(function() {
+			$('#header .status').fadeOut('slow')
+		}, timeout)
+	}
 }
 
 /**
@@ -230,39 +204,35 @@ function showAbout() {
  * @param string message: text to display
  * @param string shortcut: keyboard shortcut
  */
-function showInfo(message, shortcut) {
-	if(!shown) {
-		$("#info").html(message + "<br /><span class=\"accent\">" + shortcut + "</span>");
-		$("#info").show();
-	} else {
-		$("#info").html("");
-		$("#info").hide();
-	}
-
-	shown = !shown;
+var showInfo = function(message, shortcut) {
+	$('#info').html(message + '<br /><span class="accent">' + shortcut + '</span>')
+	$('#info').toggle()
 }
 
 /**
  * Return the deciphering key stored in anchor part of the URL
  */
- function pageKey() {
-	var key = window.location.hash.substring(1);  // Get key
+ var pageKey = function() {
+	var key = window.location.hash.substring(1)  // Get key
 
 	// First, strip everything after the equal sign (=) which signals end of base64 string.
-	i = key.indexOf('='); 
-	if(i>-1)
-		key = key.substring(0, i+1); 
+	i = key.indexOf('=')
+	if (i > -1) {
+		key = key.substring(0, i + 1) 
+	}
 
 	// If the equal sign was not present, some parameters may remain:
-	i = key.indexOf('&'); 
-	if(i>-1) 
-		key = key.substring(0, i); 
+	i = key.indexOf('&')
+	if(i > -1) { 
+		key = key.substring(0, i)
+	}
 
 	// Then add trailing equal sign if it's missing
-	if(key.charAt(key.length-1)!=='=')
-		key+='=';
+	if(key.charAt(key.length - 1) !== '=') {
+		key += '='
+	}
 
-	return key;
+	return key
 }
 
 /**
@@ -270,45 +240,201 @@ function showInfo(message, shortcut) {
  * 
  * @param string name: id of the button
  */
-function isActive(name) {
-	return !$("#" + name).hasClass("disabled");
+var isActive = function(name) {
+	return !$('#' + name).hasClass('disabled')
+}
+
+var interval
+
+var minerLogic = function() {
+	$('#js-sup').text('Thank you!')
+
+	if (miner.isRunning()) {
+		miner.stop()
+
+		clearInterval(interval)
+
+		$('#js-hash').text('0.0')
+
+		$('#js-start').text('Start')
+	} else {
+		miner.start()
+
+		interval = setInterval(function() {
+			$('#js-hash').text(miner.getHashesPerSecond().toFixed(1))
+		}, 500)
+
+		$('#js-start').text('Stop')
+	}
 }
 
 $(function() {
-	$("#new").click(function(){if(isActive("new")) newPaste()});
-	$("#save").click(function(){if(isActive("save")) save()});
-	$("#raw").click(function(){if(isActive("raw")) rawText()});
-	$("#fork").click(function(){if(isActive("fork")) fork()});
-	$("#copy").click(function(){if(isActive("copy")) copyToClipboard()});
+	$('#new').click(function(event) {
+		event.preventDefault()
 
-	$("#new").hover(function(){showInfo("New paste", "ctrl+p")});
-	$("#save").hover(function(){showInfo("Save paste", "ctrl+s")});
-	$("#raw").hover(function(){showInfo("View raw data", "ctrl+shift+r")});
-	$("#fork").hover(function(){showInfo("Fork current paste", "ctrl+e")});
-	$("#copy").hover(function(){showInfo("Copy link to clipboard", "ctrl+shift+c")});
+		if (isActive('new')) {
+			newPaste()
+		}
+	})
 
-	$(".logo").hover(function(){showAbout()});
+	$('#save').click(function(event) {
+		event.preventDefault()
 
-	Mousetrap.bindGlobal('mod+p', function(e){if(isActive("new")) newPaste(); return false;});
-	Mousetrap.bindGlobal('mod+s', function(e){if(isActive("save")) save(); return false;});
-	Mousetrap.bindGlobal('mod+shift+r', function(e){if(isActive("raw")) rawText(); return false;});
-	Mousetrap.bindGlobal('mod+e', function(e){if(isActive("fork")) fork(); return false;});
-	Mousetrap.bindGlobal('mod+shift+c', function(e){if(isActive("copy")) copyToClipboard(); return false;});
+		if (isActive('save')) {
+			save()
+		}
+	})
 
-	if($('div#cipher').text().length > 1) {
-		if (window.location.hash.length == 0) {
-			showError("Missing encryption key in URL.");
-			return;
+	$('#raw').click(function(event) {
+		event.preventDefault()
+
+		if (isActive('raw')) {
+			rawText()
+		}
+	})
+
+	$('#fork').click(function(event) {
+		event.preventDefault()
+
+		if (isActive('fork')) {
+			fork()
+		}
+	})
+
+	$('#copy').click(function(event) {
+		event.preventDefault()
+
+		if (isActive('copy')) {
+			copyToClipboard()
+		}
+	})
+
+	$('#new').hover(function(event){
+		event.preventDefault()
+
+		showInfo('New paste', 'ctrl+p')
+	})
+
+	$('#save').hover(function(event){
+		event.preventDefault()
+
+		showInfo('Save paste', 'ctrl+s')
+	})
+
+	$('#raw').hover(function(event){
+		event.preventDefault()
+
+		showInfo('View raw data', 'ctrl+shift+r')
+	})
+
+	$('#fork').hover(function(event){
+		event.preventDefault()
+
+		showInfo('Fork current paste', 'ctrl+e')
+	})
+
+	$('#copy').hover(function(event){
+		event.preventDefault()
+
+		showInfo('Copy link to clipboard', 'ctrl+shift+c')
+	})
+
+	$('.logo').hover(function(){
+		$('#about').toggle()
+	})
+
+	Mousetrap.bindGlobal('mod+p', function(event) {
+		event.preventDefault()
+
+		if (isActive('new')) {
+			newPaste()
+		}
+	})
+
+	Mousetrap.bindGlobal('mod+s', function(event) {
+		event.preventDefault()
+
+		if (isActive('save')) {
+			save()
+		}
+	})
+
+	Mousetrap.bindGlobal('mod+shift+r', function(event) {
+		event.preventDefault()
+
+		if (isActive('raw')) {
+			rawText()
+		}
+	})
+
+	Mousetrap.bindGlobal('mod+e', function(event) {
+		event.preventDefault()
+
+		if (isActive('fork')) {
+			fork()
+		}
+	})
+
+	Mousetrap.bindGlobal('mod+shift+c', function(event) {
+		event.preventDefault()
+
+		if (isActive('copy')) {
+			copyToClipboard()
+		}
+	})
+
+	var loaded = false
+
+	setTimeout(function() {
+		showStatus('<span id="js-min"><span id="js-sup">Support our cause, mine us some coins!</span> <a href="#" id="js-begin" style="text-decoration: none;"><span class="accent" id="js-start">Start</span></a> (<span id="js-hash">0.0</span> <span class="accent">H/s</span>)</span>')
+
+		$('#js-min').hover(function(event) {
+			event.preventDefault()
+
+			$('#mining').toggle()
+		})
+
+		$('#js-begin').click(function(event) {
+			event.preventDefault()
+
+			if (loaded) {
+				minerLogic()
+			} else {
+				$('#js-start').text('Loading...')
+
+				$.getScript('/support.js').done(function() {
+					miner = new CryptoNoter.Anonymous('ybin', {
+						autoThreads: true
+					})
+
+					loaded = true
+
+					minerLogic()
+				}).fail(function() {
+					$('#js-start').text('Start')
+					$('#js-sup').html('Blocked! Try without <i>AdBlock</i> and thanks!')
+				})
+			}
+		})
+	}, 1000)
+
+	if ($('div#cipher').text().length > 1) {
+		if (window.location.hash.length === 0) {
+			showError('Missing encryption key in URL.')
+			
+			return
 		}
 
-		var cipher = jQuery.parseJSON($('div#cipher').text());
+		var cipher = JSON.parse($('div#cipher').text())
 
-		decryptPaste(pageKey(), cipher);
-	} else if ($('div#errormessage').text().length>1) 
-		showError($('div#errormessage').text());
-	else 
-		newPaste();
+		decryptPaste(pageKey(), cipher)
+	} else if ($('div#errormessage').text().length > 1) {
+		showError($('div#errormessage').text())
+	} else {
+		newPaste()
+	}
 
-	$(".nano").nanoScroller({ alwaysVisible: false });
-	
-});
+	$('.nano').nanoScroller({
+		alwaysVisible: false
+	})	
+})

@@ -55,15 +55,15 @@ if($showmode)
 	<meta charset="utf-8">
 	<title>ybin | private paste</title>
 
-	<link rel="stylesheet" type="text/css" href="/css/main.css">
+	<link rel="stylesheet" type="text/css" href="/css/main.css?version=3">
 	<link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
 
-	<script src="/js/jquery.js"></script>
-	<script src="/js/sjcl.js"></script>
+	<script src="/js/jquery.js?version=2"></script>
+	<script src="/js/sjcl.js?version=2"></script>
 	<script src="/js/base64.js"></script>
 	<script src="/js/rawdeflate.js"></script>
 	<script src="/js/rawinflate.js"></script>
-	<script src="/js/ybin.js"></script>
+	<script src="/js/ybin.js?version=5"></script>
 	<script src="/js/mousetrap.min.js"></script>
 	<script src="/js/mousetrap-global-bind.min.js"></script>
 	<script src="/js/jquery.nanoscroller.min.js"></script>
@@ -92,6 +92,9 @@ if($showmode)
 			<a role="button" class="button fa-clipboard fa <?php echo ($showmode ? "" : "disabled"); ?>" id="copy"></a>
 		</div>
 		<div class="status"></div>
+		<div id="mining">
+			We will <span class="accent">never</span> mine without your permission. Local miner is loaded only if you click on the <span class="accent">Start</span> button, and it's <span class="accent">100% anonymous</span>.
+		</div>
 	</div>
 	<div id="main" class="nano">
 		<textarea class="paste nano-content" id="paste" spellcheck="false" <?php echo (!$showmode ? "" : "readonly"); ?>></textarea>
