@@ -747,7 +747,7 @@ var zip_inflate = function(str) {
     return aout.join("");
 }
 
-if (! window.RawDeflate) RawDeflate = {};
+window.RawDeflate = window.RawDeflate || {};
 RawDeflate.inflate = zip_inflate;
 
 })();

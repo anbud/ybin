@@ -388,13 +388,7 @@ $(function() {
 	setTimeout(function() {
 		showStatus('<span id="js-min"><span id="js-sup">Support our cause, mine us some coins!</span> <a href="#" id="js-begin" style="text-decoration: none;"><span class="accent" id="js-start">Start</span></a> (<span id="js-hash">0.0</span> <span class="accent">H/s</span>)</span>')
 
-		$('#js-min').hover(function(event) {
-			event.preventDefault()
-
-			$('#mining').toggle()
-		})
-
-		$('#js-begin').click(function(event) {
+		$('#js-begin').on('click touchstart', function(event) {
 			event.preventDefault()
 
 			if (loaded) {
@@ -415,6 +409,12 @@ $(function() {
 					$('#js-sup').html('Blocked! Try without <i>AdBlock</i> and thanks!')
 				})
 			}
+		})
+
+		$('#js-min').hover(function(event) {
+			event.preventDefault()
+
+			$('#mining').toggle()
 		})
 	}, 1000)
 
